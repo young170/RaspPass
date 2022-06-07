@@ -1,4 +1,4 @@
-#include "Header.h"
+#include "header.h"
 #define MAX_STRING 128
 
 int length = 8;
@@ -12,15 +12,15 @@ int main(int argc, char* argv[]) {
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    char *server = "localhost";         //your ip.
-    char *user = "pw";                  //your db id.
+    char *server = "172.17.161.85";     //your ip.
+    char *user = "oss";                  //your db id.
     char *password = "your_password";   //your db password.
     char *database = "pwdb";            //your db name
 
     conn = mysql_init(NULL);
 
     /* Connect to database */
-    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0)) {
+    if (mysql_real_connect(conn, server, user, password, database, 0, NULL, 0) == NULL) {
         printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
         return 0;
     }
@@ -81,8 +81,16 @@ int main(int argc, char* argv[]) {
                     result = upperlowernumber();
                 }
 
-                printf("\nCopy random generated password: %s\n\n", result);
-                snprintf(query, MAX_STRING, "INSERT INTO user (name, password) VALUES ('%s', '%s')", site, result);
+                printf("\nCopy random generated password: %s\n", result);
+
+                char db[100] = {"INSERT INTO user(name, password) VALUES('"};
+
+                strcat(db, site);
+                strcat(db, "', '");
+                strcat(db, result);
+                strcat(db, "')");
+
+                mysql_query(conn, db);
                 printf("\nContinue? (0: quit, 1: continue): ");
                 scanf("%d", &cont);
                 if(cont == 0) break;
@@ -105,6 +113,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    mysql_close(conn);
     printf("Have a good day:)\n");
 }
 
