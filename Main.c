@@ -1,59 +1,124 @@
 #include "Header.h"
+#define MAX_STRING 128
 
 int length = 8;
+char query[MAX_STRING] = {0};
 
 int main(int argc, char* argv[]) {
-    if(argc == 1) {
-        printf("Please enter argv to access program.\n");
+    //=============================
+    //------------DB---------------
+    //=============================
+    MYSQL *conn;
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+
+    char *server = "localhost";         //your ip.
+    char *user = "pw";                  //your db id.
+    char *password = "your_password";   //your db password.
+    char *database = "pwdb";            //your db name
+
+    conn = mysql_init(NULL);
+
+    /* Connect to database */
+    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0)) {
+        printf("Failed to connect MySQL Server %s. Error: %s\n", server, mysql_error(conn));
         return 0;
     }
+    //=============================
+    //------------DB---------------
+    //=============================
+    int inputOption;
+    char passOption[20];
+    char site[100];
 
-    char* result;
+    printf("Hello!\n\n");
 
-    if(argc == 3) {
-        if(strcmp(argv[2], "len") == 0 || strcmp(argv[2], "length") == 0) {
-            printf("Enter desired length of password: ");
-            scanf("%d", &length);
+    while(1) {
+        printf("Enter 0 to quit\n");
+        printf("Enter 1 for creating a random generated password.\n");
+        printf("Enter 2 to access your Master password.\n");
+        printf("Input: ");
+        scanf("%d", &inputOption);
+
+        if(inputOption == 1) {
+            help();
+            int cont;
+
+            while(1) {
+                printf("\nEnter name of password's site: ");
+                scanf("%s", &site);
+                printf("Enter desired length of password: ");
+                scanf("%d", &length);
+                printf("Enter desired option for password: ");
+                scanf("%s", &passOption);
+
+                char* result;
+
+                if(strcmp(passOption, "h") == 0 || strcmp(passOption, "help") == 0) {
+                    help();
+                    return 0;
+                }
+
+                if(strcmp(passOption, "a") == 0 || strcmp(passOption, "all") == 0) {
+                    result = all();
+                }
+                if(strcmp(passOption, "u") == 0 || strcmp(passOption, "upper") == 0) {
+                    result = upper();
+                }
+                if(strcmp(passOption, "l") == 0 || strcmp(passOption, "lower") == 0) {
+                    result = lower();
+                }
+                if(strcmp(passOption, "n") == 0 || strcmp(passOption, "number") == 0) {
+                    result = number();
+                }
+                if(strcmp(passOption, "s") == 0 || strcmp(passOption, "sign") == 0) {
+                    result = sign();
+                }
+                if(strcmp(passOption, "ul") == 0 || strcmp(passOption, "upperlower") == 0) {
+                    result = upperlower();
+                }
+                if(strcmp(passOption, "uln") == 0 || strcmp(passOption, "upperlowernumber") == 0) {
+                    result = upperlowernumber();
+                }
+
+                printf("\nCopy random generated password: %s\n\n", result);
+                snprintf(query, MAX_STRING, "INSERT INTO user (name, password) VALUES ('%s', '%s')", site, result);
+                printf("\nContinue? (0: quit, 1: continue): ");
+                scanf("%d", &cont);
+                if(cont == 0) break;
+            }
+        } else if(inputOption == 2){
+            char* pass;
+            char psd[100];
+
+            printf("Enter your pseudo password (length of pseudo password == length of resulting password): ");
+            scanf("%s", psd);
+
+            pass = generatePass(psd);
+
+            printf("Master Password: %s\n", pass);
+        } else if(inputOption == 0) {
+            break;
+        } else {
+            printf("Error!\n");
+            printf("Input again.\n");
         }
     }
 
-    if(strcmp(argv[1], "h") == 0 || strcmp(argv[1], "help") == 0) {
-        help();
-        return 0;
-    }
-
-    if(strcmp(argv[1], "a") == 0 || strcmp(argv[1], "all") == 0) {
-        result = all();
-    }
-    if(strcmp(argv[1], "u") == 0 || strcmp(argv[1], "upper") == 0) {
-        result = upper();
-    }
-    if(strcmp(argv[1], "l") == 0 || strcmp(argv[1], "lower") == 0) {
-        result = lower();
-    }
-    if(strcmp(argv[1], "n") == 0 || strcmp(argv[1], "number") == 0) {
-        result = number();
-    }
-    if(strcmp(argv[1], "s") == 0 || strcmp(argv[1], "sign") == 0) {
-        result = sign();
-    }
-    if(strcmp(argv[1], "ul") == 0 || strcmp(argv[1], "upperlower") == 0) {
-        result = upperlower();
-    }
-    if(strcmp(argv[1], "uln") == 0 || strcmp(argv[1], "upperlowernumber") == 0) {
-        result = upperlowernumber();
-    }
-
-    printf("\nCopy random generated password: %s\n\n", result);
+    printf("Have a good day:)\n");
 }
 
+
+//=======================================
+//---------------functions---------------
+//=======================================
 void help() {
-    printf( "Help :\n"
-       "\t~$ ./main [options]\n"
-       "\t**For setting the length, input after options**\n"
+    printf( "\nHelp :\n"
+       "\t~$ ./main [Inputoptions]\n"
+       "\t**For setting the length, input after Inputoptions**\n"
        "\t-len , length\n"
        "\t> Sets the length of the password (defaultL 8).\n"
-       "OPTION :\n"
+       "InputOPTION :\n"
        "\t-a , all\n"
        "\t> Creates a random password using all the characters on the keyboard.\n"
        "\t-u , upper\n"
@@ -175,4 +240,30 @@ char* upperlowernumber() {
     pass[length] = '\0';
 
     return pass;
+}
+
+char* generatePass(char psd[100]) {
+    int lenPsd = strlen(psd);
+    int count = 0;
+
+    char* result = (char*)malloc(sizeof(char)*100);
+
+    while (count <= lenPsd) {
+        int k = 7;
+        int val = (int)psd[count];
+        int dup = k;
+
+        if(val + k > 122){
+            k -= (122-val);
+            k = k % 26;
+            result[count] = (char)96 + k;
+        }
+        else
+           result[count] = (char)val + k;
+ 
+        k = dup;
+        count++;
+    }
+    
+    return result;
 }
