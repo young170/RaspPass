@@ -32,16 +32,22 @@ grant all privileges on *.* to root@localhost;
 FLUSH PRIVILEGES;
 exit;
 ```
-5. Compile using the following command.
+5. Configure mariadb settings.
+  A. Edit bind-address to 0.0.0.0
+```
+sudo nano /etc/mysql/mariadb.conf/50-server.cnf
+```
+  B. 
+6. Compile using the following command.
 ```
 gcc main.c header.h -L/usr/lib/mysql -lmysqlclient -I/usr/lib/mysql/include
 ```
-6. Interact with program.
+7. Interact with program.
 
 ---
 
 ### References
-<https://qnaplus.com/how-to-access-mysql-database-from-c-program/>
+<https://qnaplus.com/how-to-access-mysql-database-from-c-program/>  
 <https://github.com/mehrzero/random_password_generator>
 
 ---
