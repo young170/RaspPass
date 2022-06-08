@@ -32,8 +32,8 @@ grant all privileges on *.* to root@localhost;
 FLUSH PRIVILEGES;
 exit;
 ```
-5. Configure mariadb settings.
-  A. Edit bind-address to 0.0.0.0
+5. Configure mariadb settings.  
+  A. Edit bind-address to 0.0.0.0. 
 ```
 sudo nano /etc/mysql/mariadb.conf/50-server.cnf
 ```
