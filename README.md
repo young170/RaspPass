@@ -2,6 +2,17 @@
 
 ---
 
+### What does this project do?
+1. It saves safe random generated to your protected database in your raspberry pi server.  
+2. Creates a constant safe master password.  
+
+### Why is this project useful?
+Personally, I tend to forget my passwords a lot.  
+This projeect creates and saves safe passwords to the database.  
+Then can be easliy acccessed by the user for use.  
+
+---
+
 ### Before Getting Started
 ###### Prepare the following:
 1. Raspberry pi.
@@ -51,7 +62,10 @@ gcc Main.c Header.h -L/usr/lib/mysql -lmysqlclient -I/usr/lib/mysql/include
 <https://qnaplus.com/how-to-access-mysql-database-from-c-program/>  
 <https://github.com/mehrzero/random_password_generator>
 
+### My contributions to the project
+100% original idea from creator and started from scratch. 
 ---
 
 ### Information
+Email me if you need help:)  
 22100113@handong.ac.kr
