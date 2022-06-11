@@ -60,8 +60,9 @@ gcc Main.c Header.h -L/usr/lib/mysql -lmysqlclient -I/usr/lib/mysql/include
 <https://qnaplus.com/how-to-access-mysql-database-from-c-program/>  
 <https://github.com/mehrzero/random_password_generator>
 
-### My contributions to the project
+### My contributions to the project  
 100% original idea from creator and started from scratch. 
+
 ---
 
 ### Information
