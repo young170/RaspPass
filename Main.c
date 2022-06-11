@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
     }
 
     mysql_close(conn);
-    printf("Joyful Coding^^\n");
+    printf("Have a good day:)\n");
 }
 
 
