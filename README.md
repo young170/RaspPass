@@ -41,7 +41,7 @@ sudo nano /etc/mysql/mariadb.conf/50-server.cnf
 
 6. Compile using the following command.
 ```
-gcc Main.c Functions.c Header.h -L/usr/lib/mysql -lmysqlclient -I/usr/lib/mysql/include
+gcc Main.c Header.h -L/usr/lib/mysql -lmysqlclient -I/usr/lib/mysql/include
 ```
 7. Interact with program.
 
