@@ -48,8 +48,6 @@ exit;
 ```
 sudo nano /etc/mysql/mariadb.conf/50-server.cnf
 ```
-    B.   
-
 6. Compile using the following command.
 ```
 gcc Main.c Header.h -L/usr/lib/mysql -lmysqlclient -I/usr/lib/mysql/include
