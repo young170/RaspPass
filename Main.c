@@ -13,10 +13,10 @@ int main(int argc, char* argv[]) {
     MYSQL_ROW row;
     MYSQL_ROW record;
 
-    char *server = "172.17.161.85";     //your ip.
-    char *user = "oss";                  //your db id.
-    char *password = "your_password";   //your db password.
-    char *database = "pwdb";            //your db name
+    char *server = "";     //your ip.
+    char *user = "";       //your db id.
+    char *password = "";   //your db password.
+    char *database = "";   //your db name
 
     conn = mysql_init(NULL);
 
@@ -37,11 +37,9 @@ int main(int argc, char* argv[]) {
     printf("Hello!\n\n");
 
     while(1) {
-        printf("Enter 0 to quit\n");
+        printf("\nEnter 0 to quit\n");
         printf("Enter 1 for creating a random generated password.\n");
         printf("Enter 2 to access your Master password.\n");
-        printf("Enter 3 to print out current state of table.\n");
-        printf("Enter 4 to delete row int database table.\n");
         printf("Input: ");
         scanf("%d", &inputOption);
 
@@ -110,20 +108,6 @@ int main(int argc, char* argv[]) {
             pass = generatePass(psd);
 
             printf("Master Password: %s\n", pass);
-        } else if(inputOption == 3){
-            while(record = mysql_fetch_row(rs)) {   //until null = print all
-                printf("Site: %s, Password: %s\n", record[0], record[1]);
-            }
-        } else if(inputOption == 4){
-            char index[20];
-            char rem[100] = {"DELETE FROM user WHERE id = "};
-
-            printf("Enter the id of the element to remove: ");
-            scanf("%s", &index);
-
-            strcat(rem, index);
-
-            mysql_query(conn, rem);
         } else if(inputOption == 0) {
             break;
         } else {
@@ -133,5 +117,165 @@ int main(int argc, char* argv[]) {
     }
 
     mysql_close(conn);
-    printf("Have a good day:)\n");
+    printf("Joyful Coding^^\n");
+}
+
+
+//=======================================
+//---------------functions---------------
+//=======================================
+void help() {
+    printf( "\nHelp :\n"
+       "\t~$ ./main [Inputoptions]\n"
+       "\t**For setting the length, input after Inputoptions**\n"
+       "\t-len , length\n"
+       "\t> Sets the length of the password (defaultL 8).\n"
+       "InputOPTION :\n"
+       "\t-a , all\n"
+       "\t> Creates a random password using all the characters on the keyboard.\n"
+       "\t-u , upper\n"
+       "\t> Makes random passwords using uppercase English letters.\n"
+       "\t-l , lower\n"
+       "\t> Makes random passwords using lowercase English letters.\n"
+       "\t-n , number\n"
+       "\t> Generates random passwords using numbers.\n"
+       "\t-s , sign\n"
+       "\t> Generate random passwords using the sign.\n"
+       "\t-ul , upperlower\n"
+       "\t> Generates random passwords using uppercase and lowercase English letters.\n"
+       "\t-uln , upperlowernumber\n"
+       "\t> Generate random passwords using uppercase English letters and lowercase letters and numbers.\n");
+}
+
+char* all() {
+    char* pass;
+    pass = (char*) malloc(sizeof(char)*100);
+
+    strcat(uppercases, lowercases);
+    strcat(uppercases, numbers);
+    strcat(uppercases, signs);
+
+    srand(time(0));
+    for (int i = 0; i < length; i++) {
+        pass[i] = uppercases[rand() % strlen(uppercases)];
+    }
+
+    pass[length] = '\0';
+
+    return pass;
+}
+
+char* upper() {
+    char* pass;
+    pass = (char*) malloc(sizeof(char)*100);
+
+    srand(time(0));
+    for (int i = 0; i < length; i++) {
+        pass[i] = uppercases[rand() % strlen(uppercases)];
+    }
+
+    pass[length] = '\0';
+
+    return pass;
+}
+
+char* lower() {
+    char* pass;
+    pass = (char*) malloc(sizeof(char)*100);
+
+    srand(time(0));
+    for (int i = 0; i < length; i++) {
+        pass[i] = lowercases[rand() % strlen(lowercases)];
+    }
+
+    pass[length] = '\0';
+
+    return pass;
+}
+
+char* number() {
+    char* pass;
+    pass = (char*) malloc(sizeof(char)*100);
+
+    srand(time(0));
+    for (int i = 0; i < length; i++) {
+        pass[i] = numbers[rand() % strlen(numbers)];
+    }
+
+    pass[length] = '\0';
+
+    return pass;
+}
+
+char* sign() {
+    char* pass;
+    pass = (char*) malloc(sizeof(char)*100);
+
+    srand(time(0));
+    for (int i = 0; i < length; i++) {
+        pass[i] = signs[rand() % strlen(signs)];
+    }
+
+    pass[length] = '\0';
+
+    return pass;
+}
+
+char* upperlower() {
+    char* pass;
+    pass = (char*) malloc(sizeof(char)*100);
+
+    strcat(uppercases, lowercases);
+
+    srand(time(0));
+    for (int i = 0; i < length; i++) {
+        pass[i] = uppercases[rand() % strlen(uppercases)];
+    }
+
+    pass[length] = '\0';
+
+    return pass;
+}
+
+char* upperlowernumber() {
+    char* pass;
+    pass = (char*) malloc(sizeof(char)*100);
+
+    strcat(uppercases, lowercases);
+    strcat(uppercases, numbers);
+
+    srand(time(0));
+    for (int i = 0; i < length; i++) {
+        pass[i] = uppercases[rand() % strlen(uppercases)];
+    }
+
+    pass[length] = '\0';
+
+    return pass;
+}
+
+char* generatePass(char psd[100]) {
+    int lenPsd = strlen(psd);
+    int count = 0;
+
+    char* result = (char*)malloc(sizeof(char)*100);
+
+    while (count <= lenPsd) {
+        int k = 7;
+        int val = (int)psd[count];
+        int dup = k;
+
+        if(val + k > 122){
+            k -= (122-val);
+            k = k % 26;
+            result[count] = (char)96 + k;
+        }
+        else
+           result[count] = (char)val + k;
+ 
+        k = dup;
+        count++;
+    }
+    
+    return result;
 }
