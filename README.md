@@ -70,4 +70,4 @@ https://youtu.be/XqpfUJTImzM
 
 ### Information
 Email me if you need help:)  
-22100113@handong.ac.kr
+seongbin10209@gmail.com
