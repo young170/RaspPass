@@ -8,7 +8,7 @@
 
 ### Why is this project useful?
 Personally, I tend to forget my passwords a lot.  
-This projeect creates and saves safe passwords to the database.  
+This project creates and saves safe passwords to the database.  
 Then can be easliy acccessed by the user for use.  
 
 ---
