@@ -1,4 +1,4 @@
-#include "Header.h"
+#include "header.h"
 #define MAX_STRING 128
 
 int length = 8;
