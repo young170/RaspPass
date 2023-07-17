@@ -1,4 +1,4 @@
-# 2022-1_OSSLab_FinalProject
+# RaspPass
 
 ---
 
@@ -23,7 +23,7 @@ Then can be easliy acccessed by the user for use.
 ```
 git clone https://github.com/young170/2022-1_OSSLab_FinalProject.git
 ```
-2. In Main.c edit the server, user, password, database variables to match your settings.
+2. In main.c edit the server, user, password, database variables to match your settings.
 ```
 char *server = "";     //your ip.
 char *user = "";       //your db id.
@@ -50,7 +50,7 @@ sudo nano /etc/mysql/mariadb.conf/50-server.cnf
 ```
 6. Compile using the following command.
 ```
-gcc Main.c Header.h -L/usr/lib/mysql -lmysqlclient -I/usr/lib/mysql/include
+gcc main.c -L/usr/lib/mysql -lmysqlclient -I/usr/lib/mysql/include
 ```
 7. Interact with program.
 
